@@ -27,7 +27,6 @@ public class Main extends Application {
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root, 1000, 650);
-
         // --- PAGE ACCUEIL ---
         Label accueilLabel = new Label("Bienvenue !");
         Button goToPointage = new Button("Suivant");
