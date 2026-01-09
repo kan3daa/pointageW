@@ -23,6 +23,7 @@ public class Main extends Application {
         Font.loadFont(getClass().getResourceAsStream("/com/example/pointagew/fonts/Helvetica.ttf"), 12);
         Font.loadFont(getClass().getResourceAsStream("/com/example/pointagew/fonts/Helvetica-Bold.ttf"), 12);
 
+
         // --- Scene unique ---
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
