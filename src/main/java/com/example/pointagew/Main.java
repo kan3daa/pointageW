@@ -3,15 +3,12 @@ package com.example.pointagew;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.text.Font;
 
-import java.lang.classfile.Signature;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -23,99 +20,95 @@ public class Main extends Application {
         Font.loadFont(getClass().getResourceAsStream("/com/example/pointagew/fonts/Helvetica.ttf"), 12);
         Font.loadFont(getClass().getResourceAsStream("/com/example/pointagew/fonts/Helvetica-Bold.ttf"), 12);
 
-        // --- Scene unique ---
+        // --- Root unique et scène ---
         VBox root = new VBox();
         root.setAlignment(Pos.CENTER);
         Scene scene = new Scene(root, 1000, 650);
-        // --- PAGE ACCUEIL ---
+
+        // ======================
+        // PAGE ACCUEIL
+        // ======================
         Label accueilLabel = new Label("Bienvenue !");
         Button goToPointage = new Button("Suivant");
-
-        VBox accueilPage = new VBox(12, accueilLabel, goToPointage);
+        VBox accueilPage = new VBox(20, accueilLabel, goToPointage);
         accueilPage.setAlignment(Pos.CENTER);
 
-        // --- Saisie de l'id ---
-        Label titre = new Label("Saisie");
-        TextArea zText = new TextArea("ex: 123456789");
-        Button confirmer = new Button("Confirmer");
-        Button accueil = new Button("accueil");
-
-        VBox pointagePage = new VBox(12, titre, zText, confirmer, accueil);
+        // ======================
+        // PAGE POINTAGE (ID)
+        // ======================
+        Label pointageLabel = new Label("Entrez votre ID");
+        pointageLabel.getStyleClass().add("pointageLabel");
+        TextField idInput = new TextField();
+        idInput.setPromptText("ex: 123456789");
+        Button confirmerID = new Button("Confirmer");
+        Button retourAccueil = new Button("Retour à l'accueil");
+        VBox pointagePage = new VBox(12, pointageLabel, idInput, confirmerID, retourAccueil);
         pointagePage.setAlignment(Pos.CENTER);
 
-        // --- PAGE Motif ---
-        Label pointageLabel = new Label("Page Motif");
+        // ======================
+        // PAGE MOTIF
+        // ======================
         Button matin = new Button("Matin");
+        matin.getStyleClass().add("matinButton");
         Button apresMidi = new Button("Après-midi");
         Button repas = new Button("Repas");
-        Button retour = new Button("Retour");
-        Button confirmer1 = new Button("Confirmer");
+        Button retourPointage = new Button("Retour");
+        Button confirmerMotif = new Button("Confirmer");
 
+        // Choix repas
         HBox repasChoice = new HBox(10);
-        Button oui = new Button("Oui");
-        Button non = new Button("Non");
+        ToggleButton oui = new ToggleButton("Oui");
+        ToggleButton non = new ToggleButton("Non");
         repasChoice.getChildren().addAll(oui, non);
         repasChoice.setAlignment(Pos.CENTER);
         repasChoice.setVisible(false);
 
+        ToggleGroup group = new ToggleGroup();
+        oui.setToggleGroup(group);
+        non.setToggleGroup(group);
 
-
-        VBox motifPage = new VBox(12, pointageLabel, matin, apresMidi, repas, repasChoice, retour,confirmer1);
+        VBox motifPage = new VBox(12, matin, apresMidi, repas, repasChoice, retourPointage, confirmerMotif);
         motifPage.setAlignment(Pos.CENTER);
 
-        // --- Merci --
-        Label titreM = new Label("Merci ");
-
-        VBox merciPage = new VBox(12,titreM);
+        // ======================
+        // PAGE MERCI
+        // ======================
+        Label merciLabel = new Label("Merci !");
+        VBox merciPage = new VBox(20, merciLabel);
         merciPage.setAlignment(Pos.CENTER);
 
-        // --- Navigation ---
-        goToPointage.setOnAction(e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(Objects.requireNonNull(
-                    getClass().getResource("/com/example/pointagew/pointage.css")).toExternalForm());
-            root.getChildren().setAll(pointagePage);
-        });
+        // ======================
+        // ACTIONS BOUTONS
+        // ======================
+        goToPointage.setOnAction(e -> switchPage(scene, root, pointagePage, "/com/example/pointagew/accueil.css"));
+        confirmerID.setOnAction(e -> switchPage(scene, root, motifPage, "/com/example/pointagew/accueil.css"));
+        retourAccueil.setOnAction(e -> switchPage(scene, root, accueilPage, "/com/example/pointagew/accueil.css"));
 
-        confirmer.setOnAction(e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(Objects.requireNonNull(
-                    getClass().getResource("/com/example/pointagew/pointage.css")).toExternalForm());
-            root.getChildren().setAll(motifPage);
-        });
-
-        confirmer1.setOnAction(e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(Objects.requireNonNull(
-                    getClass().getResource("/com/example/pointagew/pointage.css")).toExternalForm());
-            root.getChildren().setAll(merciPage);
-        });
-
-        retour.setOnAction(e -> {
-            scene.getStylesheets().clear();
-            scene.getStylesheets().add(Objects.requireNonNull(
-                    getClass().getResource("/com/example/pointagew/accueil.css")).toExternalForm());
-            root.getChildren().setAll(accueilPage);
-        });
-
-        accueil.setOnAction(retour.getOnAction());
+        retourPointage.setOnAction(e -> switchPage(scene, root, pointagePage, "/com/example/pointagew/accueil.css"));
+        confirmerMotif.setOnAction(e -> switchPage(scene, root, merciPage, "/com/example/pointagew/accueil.css"));
 
         matin.setOnAction(e -> System.out.println("Matin sélectionné"));
         apresMidi.setOnAction(e -> System.out.println("Après-midi sélectionné"));
-
         repas.setOnAction(e -> repasChoice.setVisible(!repasChoice.isVisible()));
         oui.setOnAction(e -> System.out.println("Repas: Oui"));
         non.setOnAction(e -> System.out.println("Repas: Non"));
 
-        // --- Afficher page accueil ---
-        scene.getStylesheets().add(Objects.requireNonNull(
-                getClass().getResource("/com/example/pointagew/accueil.css")).toExternalForm());
-        root.getChildren().setAll(accueilPage);
+        // ======================
+        // AFFICHER PAGE ACCUEIL PAR DÉFAUT
+        // ======================
+        switchPage(scene, root, accueilPage, "/com/example/pointagew/accueil.css");
 
         // --- Stage ---
         stage.setTitle("Pointage App");
         stage.setScene(scene);
         stage.show();
+    }
+
+    // --- Méthode pour changer de page et appliquer le CSS ---
+    private void switchPage(Scene scene, VBox root, VBox page, String cssPath) {
+        scene.getStylesheets().clear();
+        scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(cssPath)).toExternalForm());
+        root.getChildren().setAll(page);
     }
 
     public static void main(String[] args) {
