@@ -1,0 +1,41 @@
+.root {
+    -fx-font-family: "Helvetica";
+    -fx-background-color: #fefefe;
+}
+
+.matinButton {
+    -fx-background-color: #fefeff;
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 2em;
+    -fx-font-weight: normal;
+    -fx-padding: 0.5rem 0.75rem;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-cursor: hand;
+}
+
+.matinButton.selected {
+    -fx-background-color: rgba(101, 173, 101, 0.87);
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 2em;
+    -fx-font-weight: normal;
+    -fx-padding: 0.5rem 0.75rem;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-cursor: hand;
+}
+
+.apresMidiButton {
+    -fx-background-color: #fefeff;
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 2em;
+    -fx-font-weight: normal;
+    -fx-padding: 0.5rem 0.75rem;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-cursor: hand;
+}
+
+.repasButton {
+
+}
