@@ -2,7 +2,7 @@
 
 Application JavaFX de pointage des bénévoles (code 4 chiffres), avec enregistrement dans une base SQLite.
 
-## Clone le projet
+## Cloner le projet
 ```bash
 git clone https://github.com/kan3daa/pointageW.git
 cd pointageW/
