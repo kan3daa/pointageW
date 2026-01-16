@@ -1,0 +1,43 @@
+.root {
+    -fx-font-family: "Helvetica";
+    -fx-background-color: #fefefe;
+}
+
+.label {
+    -fx-text-fill: #f8f5a3;
+    -fx-font-family: "Helvetica Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 140px;
+}
+
+.button {
+    -fx-background-color: #fefeff;
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 28px;
+    -fx-font-weight: normal;
+    -fx-padding: 8px 12px;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-border-radius: 9999px;
+    -fx-cursor: hand;
+}
+
+
+
+.pointageLabel {
+    -fx-text-fill: #838388;
+    -fx-font-family: "Helvetica Bold";
+    -fx-font-weight: normal;
+    -fx-font-size: 20px;
+}
+
+.button.matinButton {
+    -fx-background-color: #fefeff;
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 28px;
+    -fx-font-weight: normal;
+    -fx-padding: 8px 12px;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-cursor: hand;
+}
