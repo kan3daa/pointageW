@@ -178,7 +178,7 @@ public class Main extends Application {
 
             String sql = "SELECT nom, prenom FROM benevole WHERE id_benevole = ? AND actif = 1";
             try (var c = com.example.pointagew.database.DataBase.getConnection();
-                 var ps = c.prepareStatement(sql)) {
+                var ps = c.prepareStatement(sql)) {
 
                 ps.setInt(1, code);
 

@@ -1,9 +1,7 @@
 package com.example.pointagew.database;
 
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,49 +9,42 @@ import java.util.List;
 
 import javafx.scene.control.Alert;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
 
 public class Excel {
 
+    // Méthode pour afficher une alerte d'erreur
     private void showError(String msg) {
         Alert a = new Alert(Alert.AlertType.ERROR);
         a.setHeaderText(null);
         a.setContentText(msg);
-        a.showAndWait(); // dialog bloquant [web:247]
+        a.showAndWait();
     }
+
     public Boolean creeExcel() {
-        String sql = "SELECT" +
-                "  benevole.id_benevole," +
-                "  benevole.nom," +
-                "  benevole.prenom," +
-                "  pointage.repas," +
-                "  pointage.jour," +
-                "  pointage.moment" +
-                " FROM benevole" +
-                " JOIN pointage" +
-                " ON benevole.id_benevole = pointage.id_benevole;";
+
+        String sql = "SELECT benevole.id_benevole, benevole.nom, benevole.prenom, " +
+                "pointage.repas, pointage.jour, pointage.moment " +
+                "FROM benevole " +
+                "JOIN pointage ON benevole.id_benevole = pointage.id_benevole;";
 
         List<Object[]> donnees = new ArrayList<>();
 
-        try (var c = com.example.pointagew.database.DataBase.getConnection();
-             var ps = c.prepareStatement(sql)) {
+        try (var c = DataBase.getConnection();
+            var ps = c.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery()) {
 
-
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    donnees.add(new Object[]{
-                            rs.getInt("id_benevole"),
-                            rs.getString("nom"),
-                            rs.getString("prenom"),
-                            rs.getString("jour"),
-                            rs.getString("moment"),
-                            rs.getBoolean("repas")
-                    });
-                }
+            while (rs.next()) {
+                donnees.add(new Object[]{
+                        rs.getInt("id_benevole"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("jour"),
+                        rs.getString("moment"),
+                        rs.getBoolean("repas")
+                });
             }
+
         } catch (SQLException ex) {
             ex.printStackTrace();
             showError("Erreur BDD.");
@@ -65,13 +56,15 @@ public class Excel {
             return false;
         }
 
-        String nomFichier = "C:\\Users\\evann\\pointage.xlsx";
+        // Chemin portable pour Linux et Windows
+        String nomFichier = System.getProperty("user.home") + "/pointage.xlsx";
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Feuille1");
 
+        // En-têtes
         Row headerRow = sheet.createRow(0);
-        String[] entetes = {"ID", "Nom", "Prenom","horaire", "moment" , "Prend"};
+        String[] entetes = {"ID", "Nom", "Prénom", "Jour", "Moment", "Repas"};
 
         CellStyle headerStyle = workbook.createCellStyle();
         Font font = workbook.createFont();
@@ -85,42 +78,43 @@ public class Excel {
             cell.setCellStyle(headerStyle);
         }
 
+        // Données
         int rowNum = 1;
         for (Object[] ligne : donnees) {
             Row row = sheet.createRow(rowNum++);
             for (int col = 0; col < ligne.length; col++) {
                 Cell cell = row.createCell(col);
-                if (ligne[col] instanceof String) {
-                    cell.setCellValue((String) ligne[col]);
-                } else if (ligne[col] instanceof Integer) {
-                    cell.setCellValue((Integer) ligne[col]);
-                }else if (ligne[col] instanceof Boolean){
-                    if(ligne[col].equals(true)){
-                        cell.setCellValue((String) "oui");
-                    }
-                    else {
-                        cell.setCellValue((String) "non");
-                    }
-
+                Object val = ligne[col];
+                if (val instanceof String s) {
+                    cell.setCellValue(s);
+                } else if (val instanceof Integer i) {
+                    cell.setCellValue(i);
+                } else if (val instanceof Boolean b) {
+                    cell.setCellValue(b ? "oui" : "non");
                 }
             }
         }
 
+        // Ajustement automatique des colonnes
         for (int i = 0; i < entetes.length; i++) {
             sheet.autoSizeColumn(i);
         }
 
+        // Écriture du fichier Excel
         try (FileOutputStream fileOut = new FileOutputStream(nomFichier)) {
             workbook.write(fileOut);
             System.out.println("Fichier Excel créé : " + nomFichier);
             return true;
         } catch (IOException e) {
-            System.err.println("Erreur lors de la création du fichier : " + e.getMessage());
+            e.printStackTrace();
+            showError("Erreur lors de la création du fichier Excel.");
             return false;
         } finally {
-            try { workbook.close(); } catch (IOException ignored) {}
+            try {
+                workbook.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 
-
-}
+} // <-- dernière accolade fermante pour la classe
