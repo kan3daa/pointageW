@@ -4,10 +4,16 @@
 }
 
 .label {
-    -fx-text-fill: #f8f5a3;
+    -fx-text-fill: #df7a14;
     -fx-font-family: "Helvetica Bold";
     -fx-font-weight: bold;
     -fx-font-size: 140px;
+}
+.label#exelEtat{
+    -fx-text-fill: #df7a14;
+    -fx-font-family: "Helvetica Bold";
+    -fx-font-weight: bold;
+    -fx-font-size: 70px;
 }
 
 .button {
@@ -23,6 +29,18 @@
 }
 
 
+.button:hover {
+    -fx-background-color: #7be657;
+    -fx-text-fill: #838388;
+    -fx-border-color: #838388;
+    -fx-font-size: 28px;
+    -fx-font-weight: normal;
+    -fx-padding: 8px 12px;
+    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-border-radius: 9999px;
+    -fx-cursor: hand;
+    -fx-background-radius: 9999px;
+}
 
 .pointageLabel {
     -fx-text-fill: #838388;
@@ -37,7 +55,20 @@
     -fx-border-color: #838388;
     -fx-font-size: 28px;
     -fx-font-weight: normal;
-    -fx-padding: 8px 12px;
-    -fx-box-shadow: 0 4px 20px -2px hsl(0 0% 0% / 0.08);
+    -fx-padding: 12px 16px;
     -fx-cursor: hand;
+}
+.text-field {
+    -fx-pref-width: 300px;
+    -fx-pref-height: 50px;
+
+    -fx-font-size: 24px;
+    -fx-text-fill: #838388;
+
+    -fx-background-color: white;
+    -fx-border-color: #838388;
+    -fx-border-radius: 9999px;
+    -fx-background-radius: 9999px;
+
+    -fx-padding: 0 20px;
 }

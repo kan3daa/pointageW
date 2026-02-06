@@ -5,14 +5,19 @@ import javafx.animation.PauseTransition;
 import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.stage.DirectoryChooser;
+import java.io.File;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -44,7 +49,8 @@ public class Main extends Application {
         Label accueilLabel = new Label("Bienvenue !");
         Button goToPointage = new Button("Suivant");
         Button adminB = new Button("admin");
-        VBox accueilPage = new VBox(20, accueilLabel, goToPointage, adminB);
+
+        VBox accueilPage = new VBox(20, accueilLabel, goToPointage, adminB );
         accueilPage.setAlignment(Pos.CENTER);
 
         // ======================
@@ -66,9 +72,8 @@ public class Main extends Application {
         codeInput.setTextFormatter(new TextFormatter<>(filter));
 
         Button confirmerCode = new Button("Confirmer");
-        Button retourAccueil = new Button("Retour");
-
-        VBox pointagePage = new VBox(12, pointageLabel, codeInput, confirmerCode, retourAccueil);
+        Button accueilRetour = new Button("Retour");
+        VBox pointagePage = new VBox(12, pointageLabel, codeInput, confirmerCode,accueilRetour);
         pointagePage.setAlignment(Pos.CENTER);
 
         // ======================
@@ -85,7 +90,7 @@ public class Main extends Application {
         HBox journeeChoice = new HBox(10, matin, apresMidi);
         journeeChoice.setAlignment(Pos.CENTER);
 
-        Button repas = new Button("Repas");
+        Label repas = new Label("Repas");
 
         ToggleButton oui = new ToggleButton("Oui");
         ToggleButton non = new ToggleButton("Non");
@@ -95,7 +100,6 @@ public class Main extends Application {
 
         HBox repasChoice = new HBox(10, oui, non);
         repasChoice.setAlignment(Pos.CENTER);
-        repasChoice.setVisible(false);
 
         Button retourPointage = new Button("Retour");
         Button confirmerMotif = new Button("Confirmer");
@@ -115,18 +119,21 @@ public class Main extends Application {
         // PAGE MERCI
         // ======================
         Label merciLabel = new Label("Merci !");
-        VBox merciPage = new VBox(20, merciLabel);
+        VBox merciPage = new VBox(10, merciLabel);
         merciPage.setAlignment(Pos.CENTER);
 
         //======================
         // ADMIN
         //======================
-        Label adminT = new Label("Page admin");
-        Button adminB2 = new Button("Enregistre");
-        Label enregistre = new Label("enregistre");
-        enregistre.setVisible(false);
+        Label aTitre = new Label("Page admin");
+        Label aDescription = new Label("sauvegarder sous exele ");
+        Button sauvegarder = new Button("sauvegarder");
+        Button aRetourAccueil = new  Button("Retour accueil");
+        Label exelEtat = new Label("enregistre");
+        exelEtat.setId("exelEtat");
+        exelEtat.setVisible(false);
 
-        VBox pageAdmin = new VBox(adminT,enregistre , adminB2,retourAccueil);
+        VBox pageAdmin = new VBox(aTitre,exelEtat,sauvegarder,aRetourAccueil);
         pageAdmin.setAlignment(Pos.CENTER);
 
 
@@ -134,39 +141,60 @@ public class Main extends Application {
         // ACTIONS
         // ======================
         goToPointage.setOnAction(e ->
-                switchPage(scene, root, pointagePage, "/com/example/pointagew/pointage.css")
+                switchPage(scene, root, pointagePage, "/com/example/pointagew/accueil.css")
         );
-
-        retourAccueil.setOnAction(e ->{
-                switchPage(scene, root, accueilPage, "/com/example/pointagew/accueil.css");
-                enregistre.setVisible(false);
-                }
-        );
+        accueilRetour.setOnAction(e ->{
+            switchPage(scene,root, accueilPage, "/com/example/pointagew/accueil.css");
+            exelEtat.setVisible(false);
+        });
+        aRetourAccueil.setOnAction(e -> {
+            switchPage(scene, root, accueilPage, "/com/example/pointagew/accueil.css");
+            exelEtat.setVisible(false);
+        });
 
         adminB.setOnAction(e->{
             root.getChildren().setAll(pageAdmin);
         });
+        sauvegarder.setOnAction(e ->  {
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Enregistrer le fichier de pointage");
 
-        adminB2.setOnAction(e-> {
-            Excel excel = new Excel();
+            // nom du fichier proposé par défaut
+            fileChooser.setInitialFileName("pointage.xlsx");
 
-            if (excel.creeExcel()) {
-                enregistre.setVisible(true);
-                RotateTransition rt = new RotateTransition(Duration.seconds(1), enregistre);
-                rt.setAxis(Rotate.Y_AXIS);
-                rt.setFromAngle(0);
-                rt.setToAngle(360);
-                rt.setOnFinished(ev -> enregistre.setRotate(360)); // garde la rotation finale
-                rt.play();
+            // filtre extension
+            fileChooser.getExtensionFilters().add(
+                    new FileChooser.ExtensionFilter("Fichier Excel", "*.xlsx")
+            );
+
+            File file = fileChooser.showSaveDialog(stage);
+
+            if (file != null) {
+                Excel excel = new Excel();
+
+                if (excel.creeExcel(file.toString())) {
+                    exelEtat.setText("Enregistre");
+
+                    RotateTransition rt = new RotateTransition(Duration.seconds(1), exelEtat);
+                    rt.setAxis(Rotate.Y_AXIS);
+                    rt.setFromAngle(0);
+                    rt.setToAngle(360);
+                    rt.setOnFinished(ev -> exelEtat.setRotate(360)); // garde la rotation finale
+                    rt.play();
+                }
+                else{
+                    exelEtat.setText("Erreur");
+                }
+                exelEtat.setVisible(true);
             }
         });
-
         confirmerCode.setOnAction(e -> {
             // reset identité affichée
             currentCode = null;
             currentNom = null;
             currentPrenom = null;
             bonjourMotifLabel.setText("");
+
 
             String codeTxt = codeInput.getText().trim();
             if (codeTxt.length() != 4) {
@@ -212,12 +240,10 @@ public class Main extends Application {
 
             journeeGroup.selectToggle(null);
             repasGroup.selectToggle(null);
-            repasChoice.setVisible(false);
 
-            switchPage(scene, root, pointagePage, "/com/example/pointagew/pointage.css");
+            switchPage(scene, root, pointagePage, "/com/example/pointagew/accueil.css");
         });
 
-        repas.setOnAction(e -> repasChoice.setVisible(!repasChoice.isVisible()));
 
         confirmerMotif.setOnAction(e -> {
             if (currentCode == null) {
@@ -249,7 +275,7 @@ public class Main extends Application {
             String jour = LocalDate.now().toString();
             String ts = LocalDateTime.now().toString();
 
-            String sql = "INSERT INTO pointage(id_benevole, jour, moment, repas, ts) VALUES (?,?,?,?,?)";
+            String sql = "INSERT OR IGNORE INTO  pointage(id_benevole, jour, moment, repas, ts) VALUES (?,?,?,?,?)";
             try (var c = com.example.pointagew.database.DataBase.getConnection();
                  var ps = c.prepareStatement(sql)) {
 
@@ -269,12 +295,13 @@ public class Main extends Application {
             // reset UI après pointage
             journeeGroup.selectToggle(null);
             repasGroup.selectToggle(null);
-            repasChoice.setVisible(false);
 
-            switchPage(scene, root, merciPage, "/com/example/pointagew/pointage.css");
-            PauseTransition pause = new PauseTransition(Duration.seconds(5));
-            pause.pause();
-            switchPage(scene,root,accueilPage ,"/com/exemple/pointagew/pointage.css");
+            switchPage(scene,root,merciPage, "/com/example/pointagew/acceuil.css");
+            PauseTransition p = new PauseTransition(Duration.seconds(5));
+            p.setOnFinished(ev ->
+                    switchPage(scene, root, accueilPage, "/com/example/pointagew/accueil.css")
+            );
+            p.play();
         });
 
         // ======================
@@ -312,9 +339,12 @@ public class Main extends Application {
 
     private void switchPage(Scene scene, VBox root, VBox page, String cssPath) {
         scene.getStylesheets().clear();
-        scene.getStylesheets().add(
-                Objects.requireNonNull(getClass().getResource(cssPath)).toExternalForm()
-        );
+        var css = getClass().getResource(cssPath);
+        if (css == null) {
+            System.err.println("CSS introuvable : " + cssPath);
+        } else {
+            scene.getStylesheets().add(css.toExternalForm());
+        }
         root.getChildren().setAll(page);
     }
 
