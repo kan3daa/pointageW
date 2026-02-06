@@ -23,9 +23,7 @@ public class Excel {
         a.setContentText(msg);
         a.showAndWait(); // dialog bloquant [web:247]
     }
-
-
-    public Boolean creeExcel(String nomFichier) {
+    public Boolean creeExcel() {
         String sql = "SELECT" +
                 "  benevole.id_benevole," +
                 "  benevole.nom," +
@@ -66,6 +64,8 @@ public class Excel {
             showError("Aucun bénévole trouvé.");
             return false;
         }
+
+        String nomFichier = "C:\\Users\\evann\\pointage.xlsx";
 
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Feuille1");
