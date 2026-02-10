@@ -126,7 +126,7 @@ public class Main extends Application {
         // ADMIN
         //======================
         Label aTitre = new Label("Page admin");
-        Label aDescription = new Label("sauvegarder sous exele ");
+        Label aDescription = new Label("cliquer pour sauvegarder");
         Button sauvegarder = new Button("sauvegarder");
         Button aRetourAccueil = new  Button("Retour accueil");
         Label exelEtat = new Label("enregistre");
@@ -206,7 +206,7 @@ public class Main extends Application {
 
             String sql = "SELECT nom, prenom FROM benevole WHERE id_benevole = ? AND actif = 1";
             try (var c = com.example.pointagew.database.DataBase.getConnection();
-                var ps = c.prepareStatement(sql)) {
+                 var ps = c.prepareStatement(sql)) {
 
                 ps.setInt(1, code);
 

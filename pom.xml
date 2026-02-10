@@ -16,9 +16,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Java utilisé -->
-        <java.version>25</java.version>
+        <java.version>24</java.version>
 
-        <maven.compiler.release>25</maven.compiler.release>
+        <maven.compiler.release>24</maven.compiler.release>
 
         <javafx.version>21.0.6</javafx.version>
         <junit.version>5.12.1</junit.version>

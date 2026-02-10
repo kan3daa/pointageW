@@ -1,6 +1,5 @@
 package com.example.pointagew.database;
 
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -23,7 +22,7 @@ public class Excel {
         a.setContentText(msg);
         a.showAndWait(); // dialog bloquant [web:247]
     }
-    public Boolean creeExcel() {
+    public Boolean creeExcel(String string) {
         String sql = "SELECT" +
                 "  benevole.id_benevole," +
                 "  benevole.nom," +
