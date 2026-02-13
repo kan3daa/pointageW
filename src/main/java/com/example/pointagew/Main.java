@@ -24,6 +24,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.function.UnaryOperator;
+import static com.example.pointagew.Erreur.showError;
 
 public class Main extends Application {
 
@@ -330,12 +331,7 @@ public class Main extends Application {
         }
     }
 
-    private void showError(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.showAndWait(); // dialog bloquant [web:247]
-    }
+
 
     private void switchPage(Scene scene, VBox root, VBox page, String cssPath) {
         scene.getStylesheets().clear();

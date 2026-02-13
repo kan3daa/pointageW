@@ -8,20 +8,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javafx.scene.control.Alert;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
+import static com.example.pointagew.Erreur.showError;
 
 public class Excel {
 
-    private void showError(String msg) {
-        Alert a = new Alert(Alert.AlertType.ERROR);
-        a.setHeaderText(null);
-        a.setContentText(msg);
-        a.showAndWait(); // dialog bloquant [web:247]
-    }
     public Boolean creeExcel(String string) {
         String sql = "SELECT" +
                 "  benevole.id_benevole," +
